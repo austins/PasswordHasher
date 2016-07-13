@@ -6,7 +6,10 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("Password Hasher")]
-[assembly: AssemblyDescription("Lets you hash a string through a variety of algorithms and see how long each method takes and the length of the resulting hashes.")]
+[assembly:
+    AssemblyDescription(
+        "Lets you hash a string through a variety of algorithms and see how long each method takes and the length of the resulting hashes."
+        )]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Austin S.")]
 [assembly: AssemblyProduct("Password Hasher")]

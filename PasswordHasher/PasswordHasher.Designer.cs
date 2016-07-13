@@ -35,13 +35,14 @@
             this.lblResults = new System.Windows.Forms.Label();
             this.lblPasswordLength = new System.Windows.Forms.Label();
             this.dgvResults = new System.Windows.Forms.DataGridView();
+            this.mnuResults = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuResultsCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.txtMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtHashedPassword = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mnuResults = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuResultsCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnGenerate = new System.Windows.Forms.Button();
+            this.prgResults = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this.mnuResults.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +81,7 @@
             // 
             this.lblResults.AutoSize = true;
             this.lblResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblResults.Location = new System.Drawing.Point(9, 129);
+            this.lblResults.Location = new System.Drawing.Point(9, 126);
             this.lblResults.Name = "lblResults";
             this.lblResults.Size = new System.Drawing.Size(172, 20);
             this.lblResults.TabIndex = 3;
@@ -121,36 +122,7 @@
             this.dgvResults.RowHeadersVisible = false;
             this.dgvResults.Size = new System.Drawing.Size(710, 325);
             this.dgvResults.TabIndex = 8;
-            this.dgvResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvResults_CellContentClick);
             this.dgvResults.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvResults_CellMouseUp);
-            // 
-            // txtMethod
-            // 
-            this.txtMethod.FillWeight = 120.8127F;
-            this.txtMethod.HeaderText = "Method";
-            this.txtMethod.Name = "txtMethod";
-            this.txtMethod.ReadOnly = true;
-            // 
-            // txtHashedPassword
-            // 
-            this.txtHashedPassword.FillWeight = 175F;
-            this.txtHashedPassword.HeaderText = "Hashed Password";
-            this.txtHashedPassword.Name = "txtHashedPassword";
-            this.txtHashedPassword.ReadOnly = true;
-            // 
-            // txtLength
-            // 
-            this.txtLength.FillWeight = 35F;
-            this.txtLength.HeaderText = "Length";
-            this.txtLength.Name = "txtLength";
-            this.txtLength.ReadOnly = true;
-            // 
-            // txtTime
-            // 
-            this.txtTime.FillWeight = 55F;
-            this.txtTime.HeaderText = "Time (ms)";
-            this.txtTime.Name = "txtTime";
-            this.txtTime.ReadOnly = true;
             // 
             // mnuResults
             // 
@@ -178,11 +150,51 @@
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
+            // txtMethod
+            // 
+            this.txtMethod.FillWeight = 125F;
+            this.txtMethod.HeaderText = "Method";
+            this.txtMethod.Name = "txtMethod";
+            this.txtMethod.ReadOnly = true;
+            // 
+            // txtHashedPassword
+            // 
+            this.txtHashedPassword.FillWeight = 175F;
+            this.txtHashedPassword.HeaderText = "Hashed Password";
+            this.txtHashedPassword.Name = "txtHashedPassword";
+            this.txtHashedPassword.ReadOnly = true;
+            // 
+            // txtLength
+            // 
+            this.txtLength.FillWeight = 35F;
+            this.txtLength.HeaderText = "Length";
+            this.txtLength.Name = "txtLength";
+            this.txtLength.ReadOnly = true;
+            // 
+            // txtTime
+            // 
+            this.txtTime.FillWeight = 55F;
+            this.txtTime.HeaderText = "Time (ms)";
+            this.txtTime.Name = "txtTime";
+            this.txtTime.ReadOnly = true;
+            // 
+            // prgResults
+            // 
+            this.prgResults.Enabled = false;
+            this.prgResults.Location = new System.Drawing.Point(187, 126);
+            this.prgResults.MarqueeAnimationSpeed = 50;
+            this.prgResults.Name = "prgResults";
+            this.prgResults.Size = new System.Drawing.Size(100, 20);
+            this.prgResults.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.prgResults.TabIndex = 10;
+            this.prgResults.Visible = false;
+            // 
             // frmPasswordHasher
             // 
             this.AcceptButton = this.btnGenerate;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(735, 489);
+            this.Controls.Add(this.prgResults);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.dgvResults);
             this.Controls.Add(this.lblPasswordLength);
@@ -195,6 +207,7 @@
             this.Name = "frmPasswordHasher";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Password Hasher";
+            this.Load += new System.EventHandler(this.frmPasswordHasher_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
             this.mnuResults.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -217,6 +230,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn txtHashedPassword;
         private System.Windows.Forms.DataGridViewTextBoxColumn txtLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn txtTime;
+        private System.Windows.Forms.ProgressBar prgResults;
     }
 }
 

@@ -141,7 +141,7 @@ namespace Defuse_PasswordSecurity
             var iterations = 0;
             try
             {
-                iterations = Int32.Parse(split[ITERATION_INDEX]);
+                iterations = int.Parse(split[ITERATION_INDEX]);
             }
             catch (ArgumentNullException ex)
             {
@@ -215,7 +215,7 @@ namespace Defuse_PasswordSecurity
             var storedHashSize = 0;
             try
             {
-                storedHashSize = Int32.Parse(split[HASH_SIZE_INDEX]);
+                storedHashSize = int.Parse(split[HASH_SIZE_INDEX]);
             }
             catch (ArgumentNullException ex)
             {
