@@ -77,7 +77,7 @@ namespace Defuse_PasswordHashCompatible
             // Extract the parameters from the hash
             char[] delimiter = {':'};
             var split = goodHash.Split(delimiter);
-            var iterations = int.Parse(split[ITERATION_INDEX]);
+            var iterations = Int32.Parse(split[ITERATION_INDEX]);
             var salt = Convert.FromBase64String(split[SALT_INDEX]);
             var hash = Convert.FromBase64String(split[PBKDF2_INDEX]);
 
