@@ -35,14 +35,15 @@
             this.lblResults = new System.Windows.Forms.Label();
             this.lblPasswordLength = new System.Windows.Forms.Label();
             this.dgvResults = new System.Windows.Forms.DataGridView();
-            this.mnuResults = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuResultsCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnGenerate = new System.Windows.Forms.Button();
             this.txtMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtHashedPassword = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mnuResults = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuResultsCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.prgResults = new System.Windows.Forms.ProgressBar();
+            this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this.mnuResults.SuspendLayout();
             this.SuspendLayout();
@@ -124,32 +125,6 @@
             this.dgvResults.TabIndex = 8;
             this.dgvResults.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvResults_CellMouseUp);
             // 
-            // mnuResults
-            // 
-            this.mnuResults.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuResultsCopy});
-            this.mnuResults.Name = "mnuResults";
-            this.mnuResults.Size = new System.Drawing.Size(145, 26);
-            // 
-            // mnuResultsCopy
-            // 
-            this.mnuResultsCopy.Name = "mnuResultsCopy";
-            this.mnuResultsCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.mnuResultsCopy.Size = new System.Drawing.Size(144, 22);
-            this.mnuResultsCopy.Text = "&Copy";
-            this.mnuResultsCopy.Click += new System.EventHandler(this.mnuResultsCopy_Click);
-            // 
-            // btnGenerate
-            // 
-            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new System.Drawing.Point(610, 103);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(113, 43);
-            this.btnGenerate.TabIndex = 9;
-            this.btnGenerate.Text = "&Generate";
-            this.btnGenerate.UseVisualStyleBackColor = true;
-            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
-            // 
             // txtMethod
             // 
             this.txtMethod.FillWeight = 125F;
@@ -178,22 +153,63 @@
             this.txtTime.Name = "txtTime";
             this.txtTime.ReadOnly = true;
             // 
+            // mnuResults
+            // 
+            this.mnuResults.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuResultsCopy});
+            this.mnuResults.Name = "mnuResults";
+            this.mnuResults.Size = new System.Drawing.Size(145, 26);
+            // 
+            // mnuResultsCopy
+            // 
+            this.mnuResultsCopy.Name = "mnuResultsCopy";
+            this.mnuResultsCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.mnuResultsCopy.Size = new System.Drawing.Size(144, 22);
+            this.mnuResultsCopy.Text = "&Copy";
+            this.mnuResultsCopy.Click += new System.EventHandler(this.mnuResultsCopy_Click);
+            // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGenerate.Location = new System.Drawing.Point(610, 103);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(113, 43);
+            this.btnGenerate.TabIndex = 9;
+            this.btnGenerate.Text = "&Generate";
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
             // prgResults
             // 
             this.prgResults.Enabled = false;
-            this.prgResults.Location = new System.Drawing.Point(187, 126);
+            this.prgResults.Location = new System.Drawing.Point(187, 119);
             this.prgResults.MarqueeAnimationSpeed = 50;
             this.prgResults.Name = "prgResults";
-            this.prgResults.Size = new System.Drawing.Size(100, 20);
+            this.prgResults.Size = new System.Drawing.Size(100, 26);
             this.prgResults.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.prgResults.TabIndex = 10;
             this.prgResults.Visible = false;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Enabled = false;
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.Location = new System.Drawing.Point(293, 118);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(55, 28);
+            this.btnCancel.TabIndex = 11;
+            this.btnCancel.Text = "&Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Visible = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // frmPasswordHasher
             // 
             this.AcceptButton = this.btnGenerate;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(735, 489);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.prgResults);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.dgvResults);
@@ -231,6 +247,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn txtLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn txtTime;
         private System.Windows.Forms.ProgressBar prgResults;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
 

@@ -11,7 +11,7 @@ namespace PasswordHasher
 {
     public partial class frmPasswordHasher : Form
     {
-        private Thread Thread;
+        private Thread FrmThread;
 
         public frmPasswordHasher()
         {
@@ -23,9 +23,31 @@ namespace PasswordHasher
             dgvResults.Font = new Font(dgvResults.Font.FontFamily, 9);
         }
 
-        private void ShowProgressBar()
+        private void CancelTask()
         {
+            // Sleep to avoid thread being null still
+            Thread.Sleep(10);
+
+            // Cancel the task by aborting the thread
+            if (FrmThread != null)
+            {
+                FrmThread.Abort();
+                FrmThread = null;
+            }
+        }
+
+        private void BeforeTaskInit()
+        {
+            dgvResults.Invoke(new MethodInvoker(delegate { dgvResults.Rows.Clear(); }));
+
             txtPassword.Invoke(new MethodInvoker(delegate { txtPassword.ReadOnly = true; }));
+
+            // Show progress bar.
+            btnCancel.Invoke(new MethodInvoker(delegate
+            {
+                btnCancel.Visible = true;
+                btnCancel.Enabled = true;
+            }));
 
             prgResults.Invoke(new MethodInvoker(delegate
             {
@@ -36,9 +58,16 @@ namespace PasswordHasher
             }));
         }
 
-        private void HideProgressBar()
+        private void AfterTask()
         {
             txtPassword.Invoke(new MethodInvoker(delegate { txtPassword.ReadOnly = false; }));
+
+            // Hide progress bar.
+            btnCancel.Invoke(new MethodInvoker(delegate
+            {
+                btnCancel.Visible = false;
+                btnCancel.Enabled = false;
+            }));
 
             prgResults.Invoke(new MethodInvoker(delegate
             {
@@ -62,81 +91,89 @@ namespace PasswordHasher
 
         private void HashPasswords()
         {
-            dgvResults.Rows.Clear();
-
-            // Cancel the task by aborting the thread
-            if (Thread != null)
-                Thread.Abort();
+            CancelTask();
 
             // Method
             var task = Task.Run(() =>
             {
                 // Start of task
-                Thread = Thread.CurrentThread;
-                ShowProgressBar();
+                FrmThread = Thread.CurrentThread;
+                BeforeTaskInit();
 
-                // Method
-                var watch = Stopwatch.StartNew();
-                var hashedPassword = PasswordHash.CreateHash(txtPassword.Text);
-                watch.Stop();
-                AddMethodResult("Defuse PasswordHash [PBKDF2-SHA1, Salted]", hashedPassword, hashedPassword.Length,
-                    watch.ElapsedMilliseconds);
+                Stopwatch watch = null;
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = Defuse_PasswordHashCompatible.PasswordHash.CreateHash(txtPassword.Text);
-                watch.Stop();
-                AddMethodResult("Defuse PasswordHash Compatible [PBKDF2-SHA1, Salted]", hashedPassword,
-                    hashedPassword.Length, watch.ElapsedMilliseconds);
+                try
+                {
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    var hashedPassword = PasswordHash.CreateHash(txtPassword.Text);
+                    watch.Stop();
+                    AddMethodResult("Defuse PasswordHash [PBKDF2-SHA1, Salted]", hashedPassword, hashedPassword.Length,
+                        watch.ElapsedMilliseconds);
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = Defuse_PasswordSecurity.PasswordHash.CreateHash(txtPassword.Text);
-                watch.Stop();
-                AddMethodResult("Defuse PasswordHash Compatible Version [PBKDF2-SHA1, Salted]", hashedPassword,
-                    hashedPassword.Length, watch.ElapsedMilliseconds);
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = Defuse_PasswordHashCompatible.PasswordHash.CreateHash(txtPassword.Text);
+                    watch.Stop();
+                    AddMethodResult("Defuse PasswordHash Compatible [PBKDF2-SHA1, Salted]", hashedPassword,
+                        hashedPassword.Length, watch.ElapsedMilliseconds);
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(txtPassword.Text, "SHA1");
-                watch.Stop();
-                AddMethodResult("FormsAuthentication.HashPasswordForStoringInConfigFile() [SHA1]", hashedPassword,
-                    hashedPassword.Length, watch.ElapsedMilliseconds);
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = Defuse_PasswordSecurity.PasswordHash.CreateHash(txtPassword.Text);
+                    watch.Stop();
+                    AddMethodResult("Defuse PasswordHash Compatible Version [PBKDF2-SHA1, Salted]", hashedPassword,
+                        hashedPassword.Length, watch.ElapsedMilliseconds);
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(txtPassword.Text, "MD5");
-                watch.Stop();
-                AddMethodResult("FormsAuthentication.HashPasswordForStoringInConfigFile() [MD5]", hashedPassword,
-                    hashedPassword.Length, watch.ElapsedMilliseconds);
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(txtPassword.Text, "SHA1");
+                    watch.Stop();
+                    AddMethodResult("FormsAuthentication.HashPasswordForStoringInConfigFile() [SHA1]", hashedPassword,
+                        hashedPassword.Length, watch.ElapsedMilliseconds);
+
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(txtPassword.Text, "MD5");
+                    watch.Stop();
+                    AddMethodResult("FormsAuthentication.HashPasswordForStoringInConfigFile() [MD5]", hashedPassword,
+                        hashedPassword.Length, watch.ElapsedMilliseconds);
 
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = Sodium.PasswordHash.ArgonHashString(txtPassword.Text,
-                    Sodium.PasswordHash.StrengthArgon.Interactive);
-                watch.Stop();
-                AddMethodResult("Sodium PasswordHash [Argon2, Interactive]", hashedPassword, hashedPassword.Length,
-                    watch.ElapsedMilliseconds);
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = Sodium.PasswordHash.ArgonHashString(txtPassword.Text,
+                        Sodium.PasswordHash.StrengthArgon.Interactive);
+                    watch.Stop();
+                    AddMethodResult("Sodium PasswordHash [Argon2, Interactive]", hashedPassword, hashedPassword.Length,
+                        watch.ElapsedMilliseconds);
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = Sodium.PasswordHash.ArgonHashString(txtPassword.Text,
-                    Sodium.PasswordHash.StrengthArgon.Moderate);
-                watch.Stop();
-                AddMethodResult("Sodium PasswordHash [Argon2, Moderate]", hashedPassword, hashedPassword.Length,
-                    watch.ElapsedMilliseconds);
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = Sodium.PasswordHash.ArgonHashString(txtPassword.Text,
+                        Sodium.PasswordHash.StrengthArgon.Moderate);
+                    watch.Stop();
+                    AddMethodResult("Sodium PasswordHash [Argon2, Moderate]", hashedPassword, hashedPassword.Length,
+                        watch.ElapsedMilliseconds);
 
-                // Method
-                watch = Stopwatch.StartNew();
-                hashedPassword = Sodium.PasswordHash.ArgonHashString(txtPassword.Text,
-                    Sodium.PasswordHash.StrengthArgon.Sensitive);
-                watch.Stop();
-                AddMethodResult("Sodium PasswordHash [Argon2, Sensitive]", hashedPassword, hashedPassword.Length,
-                    watch.ElapsedMilliseconds);
+                    // Method
+                    watch = Stopwatch.StartNew();
+                    hashedPassword = Sodium.PasswordHash.ArgonHashString(txtPassword.Text,
+                        Sodium.PasswordHash.StrengthArgon.Sensitive);
+                    watch.Stop();
+                    AddMethodResult("Sodium PasswordHash [Argon2, Sensitive]", hashedPassword, hashedPassword.Length,
+                        watch.ElapsedMilliseconds);
+                }
+                catch (OutOfMemoryException ex)
+                {
+                    if (watch != null)
+                        watch.Stop();
+
+                    AddMethodResult("EXCEPTION OCCURRED", "OUT OF MEMORY", 0, 0);
+                }
 
                 // End of task
-                HideProgressBar();
+                AfterTask();
             });
         }
 
@@ -178,6 +215,12 @@ namespace PasswordHasher
             }
 
             HashPasswords();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            CancelTask();
+            AfterTask();
         }
     }
 }
